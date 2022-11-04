@@ -1,17 +1,16 @@
-# Very short description of the package
+# Laravel A-ray
 
 [![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-a-ray/laravel a-ray.svg?style=flat-square)](https://packagist.org/packages/laravel-a-ray/laravel a-ray)
 [![Total Downloads](https://img.shields.io/packagist/dt/laravel-a-ray/laravel a-ray.svg?style=flat-square)](https://packagist.org/packages/laravel-a-ray/laravel a-ray)
-![GitHub Actions](https://github.com/laravel-a-ray/laravel a-ray/actions/workflows/main.yml/badge.svg)
 
-This is where your description should go. Try and limit it to a paragraph or two, and maybe throw in a mention of what PSRs you support to avoid any confusion with users and contributors.
+This package assist create push on a-ray from laravel.
 
 ## Installation
 
 You can install the package via composer:
 
 ```bash
-composer require laravel-a-ray/laravel a-ray
+composer require subvitamine/laravel-a-ray
 ```
 
 ## Usage
