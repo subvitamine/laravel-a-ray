@@ -15,37 +15,45 @@ composer require subvitamine/laravel-a-ray
 
 ## Usage
 
-```php
-// Usage description here
+Add on your .env file
+
+```dotenv
+A_RAY_ENABLED=true#default true
+A_RAY_PRIVATE_KEY=pk_XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+A_RAY_NOTIFY_ERRORS_ENABLED=true#default false
+A_RAY_NOTIFY_SLACK_WEBHOOK=https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/XXXXXXXXXXXXXXXXXXXXXXXX
 ```
 
-### Testing
+Use on your code
 
-```bash
-composer test
+```php
+use Subvitamine\LaravelARay\ARay;
+use LaravelARay\LaravelARay\CommitStatus;
+
+// Check config
+ARay::checkConfig()
+
+// Init push
+$push = ARay::initPush()
+
+/**
+* Add a commit status
+ * All status : 
+ * SUCCESS
+ * INFO
+ * WARNING
+ * ERROR
+ */
+$push->addCommit('commit message', ['commit' => 'data'], CommitStatus::SUCCESS)
+
+// Send push
+ARay::sendPush($push)
 ```
 
 ### Changelog
 
 Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recently.
 
-## Contributing
-
-Please see [CONTRIBUTING](CONTRIBUTING.md) for details.
-
-### Security
-
-If you discover any security related issues, please email contact@subvitamine.com instead of using the issue tracker.
-
-## Credits
-
--   [Subvitamine](https://github.com/laravel-a-ray)
--   [All Contributors](../../contributors)
-
 ## License
 
 The MIT License (MIT). Please see [License File](LICENSE.md) for more information.
-
-## Laravel Package Boilerplate
-
-This package was generated using the [Laravel Package Boilerplate](https://laravelpackageboilerplate.com).

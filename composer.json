@@ -44,10 +44,7 @@
         "laravel": {
             "providers": [
                 "LaravelARay\\LaravelARay\\LaravelARayServiceProvider"
-            ],
-            "aliases": {
-                "LaravelARay": "LaravelARay\\LaravelARay\\LaravelARayFacade"
-            }
+            ]
         }
     }
 }

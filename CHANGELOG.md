@@ -1,7 +1,7 @@
 # Changelog
 
-All notable changes to `laravel a-ray` will be documented in this file
+#  V1.x.x
 
-## 1.0.0 - 201X-XX-XX
-
+##  V1.0.0
 - initial release
+- Add class for create push on a-ray

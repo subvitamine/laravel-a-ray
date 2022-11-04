@@ -40,6 +40,10 @@ class ARayPush
      */
     public function addCommit(string $label, array $content, CommitStatus $status): ARayPush
     {
+        if(count($this->commits) > 20) {
+            throw new \Exception('You can\'t add more than 20 commits');
+        }
+
         $behaviorClass = debug_backtrace()[1];
 
         $this->commits[] = [
@@ -47,7 +51,7 @@ class ARayPush
             'content' => [
                 'currentClass' => [
                     'class' => $behaviorClass['class'],
-                    'line' => $behaviorClass['line']
+                    'line' => isset($behaviorClass['line']) ? $behaviorClass['line'] : null,
                 ],
                 'content' => $content
             ],
@@ -130,16 +134,16 @@ class ARayPush
     {
         $result = [
             'label' => $this->label,
-            'startAt' => $this->startAt->toIso8601String(),
+            'startAt' => $this->startAt->format('Y-m-d H:i:s.u'),
             'endAt' => $this->endAt,
             'commits' => []
-            ];
+        ];
 
         foreach ($this->commits as $commit) {
             $result['commits'][] = [
                 'label' => $commit['label'],
                 'content' => $commit['content'],
-                'isAt' => $commit['isAt']->toIso8601String(),
+                'isAt' => $commit['isAt']->format('Y-m-d H:i:s.u'),
                 'status' => $commit['status']
             ];
         }
