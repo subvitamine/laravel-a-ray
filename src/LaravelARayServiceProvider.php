@@ -21,7 +21,7 @@ class LaravelARayServiceProvider extends ServiceProvider
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('laravel a-ray.php'),
+                __DIR__.'/../config/config.php' => config_path('laravel-a-ray.php'),
             ], 'config');
 
             // Publishing the views.
@@ -50,7 +50,7 @@ class LaravelARayServiceProvider extends ServiceProvider
     public function register()
     {
         // Automatically apply the package configuration
-        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel a-ray');
+        $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-a-ray');
 
         // Register the main class to use with the facade
         $this->app->singleton('laravel a-ray', function () {
