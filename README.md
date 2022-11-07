@@ -1,7 +1,7 @@
 # Laravel A-ray
 
-[![Latest Version on Packagist](https://img.shields.io/packagist/v/laravel-a-ray/laravel a-ray.svg?style=flat-square)](https://packagist.org/packages/laravel-a-ray/laravel a-ray)
-[![Total Downloads](https://img.shields.io/packagist/dt/laravel-a-ray/laravel a-ray.svg?style=flat-square)](https://packagist.org/packages/laravel-a-ray/laravel a-ray)
+[![Latest Version](https://img.shields.io/github/v/tag/subvitamine/laravel-a-ray?sort=semver&label=version)](https://github.com/subvitamine/laravel-a-ray/)
+[![Total Downloads](https://img.shields.io/packagist/dt/subvitamine/laravel-a-ray.svg?style=flat-square)](https://packagist.org/packages/subvitamine/laravel-a-ray)
 
 This package assist create push on a-ray from laravel.
 
