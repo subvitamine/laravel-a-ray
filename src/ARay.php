@@ -2,8 +2,10 @@
 
 namespace LaravelARay\LaravelARay;
 
+use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Throwable;
 
 class ARay
 {
@@ -17,11 +19,11 @@ class ARay
         $config = config('laravel-a-ray');
 
         if ($config['enabled'] && $config['private_key'] === '') {
-            throw new \Exception('You must set private key in config file');
+            throw new Exception('You must set private key in config file');
         }
 
         if ($config['notify_errors']['enabled'] && $config['notify_errors']['slack_webhook_url'] === '') {
-            throw new \Exception('You must set slack webhook url in config file');
+            throw new Exception('You must set slack webhook url in config file');
         }
 
         return true;
@@ -37,6 +39,23 @@ class ARay
     }
 
     /**
+     * Init push class
+     * @param Throwable $error
+     * @return bool
+     * @throws Exception
+     */
+    static function handleErrors(Throwable $error): bool
+    {
+        $push = self::initPush("Error Handler");
+
+        $push->addCommit("Error Handler", (array)json_decode(str_replace("\u0000", "", json_encode((array)$error))), CommitStatus::ERROR);
+
+        self::push($push);
+
+        return true;
+    }
+
+    /**
      * Push a push
      * @param ARayPush $push
      * @return boolean
@@ -49,7 +68,7 @@ class ARay
             $response = Http::post(self::$ENDPOINT . config('laravel-a-ray.private_key'), $push->toJson());
 
             if ($response->status() !== 200) {
-                throw new \Exception('Error when push to a-ray');
+                throw new Exception('Error when push to a-ray');
             }
 
             if(config('laravel-a-ray.notify_errors.enabled') && self::checkConfig()) {
@@ -61,14 +80,14 @@ class ARay
                     }
                 }
 
-                if(count($allErrors) > 0) {
+                if (count($allErrors) > 0) {
                     Http::post(config('laravel-a-ray.notify_errors.slack_webhook_url'), [
                         'text' => 'A Ray error : ' . $push->getLabel() . ' : ' . implode(', ', $allErrors)
                     ]);
                 }
             }
 
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             if (config('laravel-a-ray.notify_errors.enabled')) {
                 Http::post(config('laravel-a-ray.notify_errors.slack_webhook_url'), [
                     'text' => 'Error while pushing to a-ray: ' . $e->getMessage()

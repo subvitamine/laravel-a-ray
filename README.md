@@ -27,7 +27,7 @@ A_RAY_NOTIFY_SLACK_WEBHOOK=https://hooks.slack.com/services/XXXXXXXXX/XXXXXXXXX/
 Use on your code
 
 ```php
-use Subvitamine\LaravelARay\ARay;
+use LaravelARay\LaravelARay\ARay;
 use LaravelARay\LaravelARay\CommitStatus;
 
 // Check config
@@ -48,6 +48,24 @@ $push->addCommit('commit message', ['commit' => 'data'], CommitStatus::SUCCESS)
 
 // Send push
 ARay::sendPush($push)
+```
+
+### Handle errors
+
+For handle errors, add this code in your App\Exceptions\Handler.php
+
+```php
+use LaravelARay\LaravelARay\ARay;
+
+//...
+public function register() {
+    $this->reportable(function (Throwable $e) {
+        ARay::notifyError($e);
+        //...
+    });
+}
+//...
+
 ```
 
 ### Changelog
