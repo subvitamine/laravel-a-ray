@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelARay\LaravelARay;
+namespace Subvitamine\LaravelARay;
 
 use Illuminate\Support\Carbon;
 

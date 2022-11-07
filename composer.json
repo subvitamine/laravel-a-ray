@@ -24,12 +24,12 @@
     },
     "autoload": {
         "psr-4": {
-            "LaravelARay\\LaravelARay\\": "src"
+            "Subvitamine\\LaravelARay\\": "src"
         }
     },
     "autoload-dev": {
         "psr-4": {
-            "LaravelARay\\LaravelARay\\Tests\\": "tests"
+            "Subvitamine\\LaravelARay\\Tests\\": "tests"
         }
     },
     "scripts": {

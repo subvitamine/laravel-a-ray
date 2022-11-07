@@ -1,6 +1,6 @@
 <?php
 
-namespace LaravelARay\LaravelARay;
+namespace Subvitamine\LaravelARay;
 
 use Illuminate\Support\ServiceProvider;
 
@@ -52,9 +52,5 @@ class LaravelARayServiceProvider extends ServiceProvider
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-a-ray');
 
-        // Register the main class to use with the facade
-        $this->app->singleton('laravel a-ray', function () {
-            return new LaravelARay;
-        });
     }
 }
