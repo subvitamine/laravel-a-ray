@@ -60,7 +60,7 @@ use Subvitamine\LaravelARay\ARay;
 //...
 public function register() {
     $this->reportable(function (Throwable $e) {
-        ARay::notifyError($e);
+        ARay::handleErrors($e);
         //...
     });
 }
