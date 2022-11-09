@@ -47,9 +47,9 @@ class ARay
      */
     static function handleErrors(Throwable $error): bool
     {
-        $push = self::initPush("Error Handler");
+        $push = self::initPush("Error handler");
 
-        $push->addCommit("Error Handler", (array)json_decode(str_replace("\u0000", "", json_encode((array)$error))), CommitStatus::ERROR);
+        $push->addCommit($error->getMessage(), (array)json_decode(str_replace("\u0000", "", json_encode((array)$error))), CommitStatus::ERROR);
 
         self::push($push);
 
