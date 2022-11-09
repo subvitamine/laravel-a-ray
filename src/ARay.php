@@ -23,7 +23,7 @@ class ARay
             throw new Exception('You must set private key in config file');
         }
 
-        if ($config['notify_errors']['enabled'] && $config['notify_errors']['slack_webhook_url'] === '') {
+        if ($config['notify_errors']['enabled'] && $config['notify_errors']['channel'] === '') {
             throw new Exception('You must set slack webhook url in config file');
         }
 
@@ -82,7 +82,7 @@ class ARay
                 }
 
                 if (count($allErrors) > 0) {
-                    Http::post(config('laravel-a-ray.notify_errors.slack_webhook_url'), [
+                    Http::post(config('laravel-a-ray.notify_errors.channel'), [
                         'text' => 'A Ray error : ' . $push->getLabel() . ' : ' . implode(', ', $allErrors)
                     ]);
                 }
