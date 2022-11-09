@@ -68,7 +68,7 @@ class ARay
         try {
             $response = Http::post(self::$ENDPOINT . config('laravel-a-ray.private_key'), $push->toJson());
 
-            if ($response->status() !== 200) {
+            if ($response->status() !== 201) {
                 throw new Exception('Error when push to a-ray');
             }
 
