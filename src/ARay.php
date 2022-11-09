@@ -83,9 +83,7 @@ class ARay
                 }
 
                 if (count($allErrors) > 0) {
-                    Http::post(config('laravel-a-ray.notify_errors.channel'), [
-                        'text' => 'A Ray error : ' . $push->getLabel() . ' : ' . implode(', ', $allErrors)
-                    ]);
+                    Log::channel(config('laravel-a-ray.notify_errors.channel'))->error('A Ray error : ' . $push->getLabel() . ' : ' . implode(', ', $allErrors));
                 }
             }
 
