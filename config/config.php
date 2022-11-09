@@ -28,6 +28,6 @@ return [
         /**
          * Slack webhook url
          */
-        'slack_webhook_url' => env('A_RAY_NOTIFY_SLACK_WEBHOOK', ''),
+        'channel' => env('A_RAY_NOTIFY_CHANNEL', 'slack'),
     ],
 ];

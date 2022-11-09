@@ -5,6 +5,7 @@ namespace Subvitamine\LaravelARay;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
+use Log;
 use Throwable;
 
 class ARay
@@ -89,9 +90,7 @@ class ARay
 
         } catch (Exception $e) {
             if (config('laravel-a-ray.notify_errors.enabled')) {
-                Http::post(config('laravel-a-ray.notify_errors.slack_webhook_url'), [
-                    'text' => 'Error while pushing to a-ray: ' . $e->getMessage()
-                ]);
+                Log::channel(config('laravel-a-ray.notify_errors.channel'))->error($e->getMessage());
             }
         }
 
