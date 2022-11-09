@@ -77,7 +77,8 @@ class ARay
 
                 foreach ($push->getCommits() as $commit) {
                     if($commit['status'] === CommitStatus::ERROR) {
-                        $allErrors += $commit['label'];
+//                        $allErrors += $commit['label'];
+                        $allErrors[] = $commit['label'];
                     }
                 }
 
