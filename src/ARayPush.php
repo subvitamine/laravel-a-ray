@@ -135,7 +135,7 @@ class ARayPush
         $result = [
             'label' => $this->label,
             'startAt' => $this->startAt->format('Y-m-d H:i:s.u'),
-            'endAt' => $this->endAt,
+            'endAt' => $this->endAt->format('Y-m-d H:i:s.u'),
             'commits' => []
         ];
 
