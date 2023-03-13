@@ -5,12 +5,14 @@ namespace Subvitamine\LaravelARay;
 use Exception;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Http;
-use Log;
+use Illuminate\Support\Facades\Log;
+use Subvitamine\LaravelARay\Jobs\PushMiddlewareResult;
 use Throwable;
 
 class ARay
 {
-    private static string $ENDPOINT = 'https://api.a-ray.subvitamine.com/webhooks/push/';
+    private static string $ENDPOINT_MONO = 'http://localhost:3000/webhooks/push/';
+    private static string $ENDPOINT_MULTIPLE = 'http://localhost:3000/webhooks/pushes/';
 
     /**
      * Check config of a-ray
@@ -34,9 +36,9 @@ class ARay
      * Init push class
      * @param string $label Label of push
      */
-    static function initPush(string $label): ARayPush
+    static function initPush(string $label, Carbon $startAt = null): ARayPush
     {
-        return new ARayPush($label);
+        return new ARayPush($label, $startAt);
     }
 
     /**
@@ -61,12 +63,12 @@ class ARay
      * @param ARayPush $push
      * @return boolean
      */
-    public static function push(ARayPush $push): bool
+    public static function push(ARayPush $push, Carbon $endAt = null): bool
     {
-        $push->setEndAt(Carbon::now());
+        $push->setEndAt($endAt ? $endAt : Carbon::now());
 
         try {
-            $response = Http::post(self::$ENDPOINT . config('laravel-a-ray.private_key'), $push->toJson());
+            $response = Http::post(self::$ENDPOINT_MONO . config('laravel-a-ray.private_key'), $push->toJson());
 
             if ($response->status() !== 201) {
                 throw new Exception('Error when push to a-ray');
@@ -94,5 +96,23 @@ class ARay
         }
 
         return true;
+    }
+
+    public static function pushMultiple(array $pushes)
+    {
+        $payload = [];
+
+        foreach ($pushes as $push) {
+            $payload[] = $push->toJson();
+        }
+
+        try {
+            $response = Http::post(self::$ENDPOINT_MULTIPLE . config('laravel-a-ray.private_key'), $payload);
+
+            if ($response->status() !== 201) {
+                throw new Exception('Error when push to a-ray');
+            }
+        } catch (\Exception $e) {
+        }
     }
 }

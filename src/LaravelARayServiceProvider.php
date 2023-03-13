@@ -2,45 +2,46 @@
 
 namespace Subvitamine\LaravelARay;
 
+use Illuminate\Console\Scheduling\Schedule;
+use Illuminate\Contracts\Http\Kernel;
 use Illuminate\Support\ServiceProvider;
+use Subvitamine\LaravelARay\Console\AraySendAndPurgeRequests;
 
 class LaravelARayServiceProvider extends ServiceProvider
 {
     /**
      * Bootstrap the application services.
      */
-    public function boot()
+    public function boot(Kernel $kernel)
     {
         /*
          * Optional methods to load your package assets
          */
         // $this->loadTranslationsFrom(__DIR__.'/../resources/lang', 'laravel a-ray');
         // $this->loadViewsFrom(__DIR__.'/../resources/views', 'laravel a-ray');
-        // $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
+        $this->loadMigrationsFrom(__DIR__ . '/../database/migrations');
         // $this->loadRoutesFrom(__DIR__.'/routes.php');
+
+
+        $kernel->pushMiddleware(\Subvitamine\LaravelARay\Middleware\BeforeArayMiddleware::class);
+        $kernel->pushMiddleware(\Subvitamine\LaravelARay\Middleware\AfterArayMiddleware::class);
 
         if ($this->app->runningInConsole()) {
             $this->publishes([
-                __DIR__.'/../config/config.php' => config_path('laravel-a-ray.php'),
+                __DIR__ . '/../config/config.php' => config_path('laravel-a-ray.php'),
             ], 'config');
-
-            // Publishing the views.
-            /*$this->publishes([
-                __DIR__.'/../resources/views' => resource_path('views/vendor/laravel a-ray'),
-            ], 'views');*/
-
-            // Publishing assets.
-            /*$this->publishes([
-                __DIR__.'/../resources/assets' => public_path('vendor/laravel a-ray'),
-            ], 'assets');*/
-
-            // Publishing the translation files.
-            /*$this->publishes([
-                __DIR__.'/../resources/lang' => resource_path('lang/vendor/laravel a-ray'),
-            ], 'lang');*/
-
             // Registering package commands.
-            // $this->commands([]);
+            $this->commands([AraySendAndPurgeRequests::class]);
+
+
+            $this->app->booted(function () {
+                $config = config('laravel-a-ray');
+
+                if ($config['api_health']['enabled']) {
+                    $schedule = $this->app->make(Schedule::class);
+                    $schedule->command('aray:requests-push-purge')->cron($config['api_health']['cron']);
+                }
+            });
         }
     }
 
@@ -51,6 +52,7 @@ class LaravelARayServiceProvider extends ServiceProvider
     {
         // Automatically apply the package configuration
         $this->mergeConfigFrom(__DIR__.'/../config/config.php', 'laravel-a-ray');
+
 
     }
 }

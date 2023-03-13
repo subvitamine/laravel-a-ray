@@ -18,15 +18,21 @@ class ARayPush
     private $startAt;
     private $endAt;
 
+    private array $meta;
+
+    private $type;
+
     private array $commits;
 
     /**
      * constructor
      */
-    public function __construct($label)
+    public function __construct($label, $startAt = null)
     {
         $this->label = $label;
-        $this->startAt = Carbon::now();
+        $this->startAt = $startAt ? $startAt : Carbon::now();
+        $this->type = "DEBUG";
+        $this->meta = [];
 
         $this->commits = [];
     }
@@ -38,9 +44,9 @@ class ARayPush
      * @param CommitStatus $status
      * @return ARayPush
      */
-    public function addCommit(string $label, array $content, CommitStatus $status): ARayPush
+    public function addCommit(string $label, array $content, CommitStatus $status, Carbon $startAt = null): ARayPush
     {
-        if(count($this->commits) > 20) {
+        if (count($this->commits) > 20) {
             throw new \Exception('You can\'t add more than 20 commits');
         }
 
@@ -55,7 +61,7 @@ class ARayPush
                 ],
                 'content' => $content
             ],
-            'isAt' => Carbon::now(),
+            'isAt' => $startAt ? $startAt : Carbon::now(),
             'status' => $status
         ];
 
@@ -127,6 +133,43 @@ class ARayPush
     }
 
     /**
+     * @return array
+     */
+    public function getMeta(): array
+    {
+        return $this->meta;
+    }
+
+    /**
+     * @param array $meta
+     */
+    public function setMeta(array $meta): void
+    {
+        $this->meta = $meta;
+    }
+
+    /**
+     * @return mixed|string
+     */
+    public function getType(): mixed
+    {
+        return $this->type;
+    }
+
+    /**
+     * @param mixed|string $type
+     */
+    public function setType(mixed $type): void
+    {
+        if (in_array($type, ['DEBUG', 'REQUEST'])) {
+            $this->type = $type;
+        } else (
+        throw new \Exception('Type must be DEBUG or REQUEST')
+        );
+    }
+
+
+    /**
      * Return json of push
      * @return string|false
      */
@@ -134,6 +177,8 @@ class ARayPush
     {
         $result = [
             'label' => $this->label,
+            'type' => $this->type,
+            'meta' => $this->meta,
             'startAt' => $this->startAt->format('Y-m-d H:i:s.u'),
             'endAt' => $this->endAt->format('Y-m-d H:i:s.u'),
             'commits' => []
